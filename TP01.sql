@@ -11,13 +11,13 @@ USE invitation;
 
 -- Création de la table
 CREATE TABLE invPersonne (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    prenom VARCHAR(30),
-    nom VARCHAR(30),
-    age INT,
-    date_inscription DATE,
-    status BOOLEAN,
-    type ENUM('membre', 'non membre'),
-    description TEXT,
-    salaire_annuel DECIMAL(12, 2)
+    id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    prenom VARCHAR(30) NOT NULL ,
+    nom VARCHAR(30) NOT NULL ,
+    age TINYINT(1) NOT NULL ,
+    inscription DATE NOT NULL DEFAULT CURRENT_TIMESTAMP ,
+    status TINYINT(1) NOT NULL DEFAULT 1 ,
+    type ENUM('membre', 'non membre') NOT NULL DEFAULT "non membre" ,
+    description TEXT NOT NULL ,
+    salaire_annuel DECIMAL(12, 2) NOT NULL 
 );
