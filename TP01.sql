@@ -15,7 +15,7 @@ CREATE TABLE invPersonne (
     prenom VARCHAR(30) NOT NULL ,
     nom VARCHAR(30) NOT NULL ,
     age TINYINT(1) NOT NULL ,
-    inscription DATE NOT NULL DEFAULT CURRENT_TIMESTAMP ,
+    inscription DATE NOT NULL,
     status TINYINT(1) NOT NULL DEFAULT 1 ,
     type ENUM('membre', 'non membre') NOT NULL DEFAULT "non membre" ,
     description TEXT NOT NULL ,
