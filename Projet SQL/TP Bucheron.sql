@@ -261,14 +261,14 @@ SELECT nom,prenom from clients;
 SELECT noFIC,etat,c.nom,c.prenom from clients as c natural join fiches where cpo LIKE('44%'); 
 
 -- Détail de la fiche 1002
-SELECT f.noFIC,c.nom,c.prenom,a.refart,a.designation,l.depart,l.retour,t.prixjour, DATEDIFF(l.retour, l.depart) * t.prixjour AS montant 
+SELECT f.noFIC,c.nom,c.prenom,a.refart,a.designation,l.depart,COALESCE(l.retour, CURDATE()),t.prixjour, DATEDIFF(COALESCE(l.retour, CURDATE()), l.depart) * t.prixjour AS montant
 from clients as c 
 INNER join fiches as f on c.noCLI = f.noCLI 
 INNER JOIN lignesfic as l on f.noFIC = l.NOFIC 
 INNER JOIN articles as a on l.refart = a.refart
 inner JOIN grilletarifs as g on a.CodeGam = g.CodeGam and a.CodeCate = g.CodeCate
 INNER join tarifs as t on g.codeTarif = t.codeTarif 
-where f.noFIC ="1002"; 
+where f.noFIC ="1002";
 
 -- prix journalier moyen de location de gamme
 SELECT g.libelle, AVG(t.prixjour) from gammes as g left join grilletarifs as gt on g.codeGam = gt.CodeGam left join tarifs as t on gt.codeTarif = t.codeTarif GROUP by g.libelle; 
@@ -328,7 +328,7 @@ GROUP BY c.libelle;
 -- l. Calcul du montant moyen des fiches de location
 SELECT AVG(total_montant) AS montant_moyen_fiche
 FROM (
-    SELECT f.noFic, SUM(DATEDIFF(l.retour, l.depart) * t.prixjour) AS total_montant
+    SELECT f.noFic, SUM(DATEDIFF(COALESCE(l.retour, CURDATE()), l.depart) * t.prixjour) AS total_montant
     FROM location_skis.fiches f
     JOIN location_skis.lignesfic l ON f.noFic = l.noFic
     JOIN location_skis.articles a ON l.refart = a.refart
@@ -353,7 +353,7 @@ WHERE c.nom = "Dupond" and c.prenom = "Jean" and c.ville = "Paris";
 Select DISTINCT a.refart, a.designation, ct.libelle from articles a inner JOIN grilletarifs g on a.CodeCate = g.CodeCate and a.CodeCate = g.CodeCate INNER JOIN categories ct on g.CodeCate = ct.CodeCate WHERE ct.libelle LIKE ("%ski%"); 
 
 -- Calcul du montant de chaque fiche soldée et du montant total des fiches
-SELECT f.noFic, SUM(DATEDIFF(l.retour, l.depart) * t.prixjour) AS montant_fiche
+SELECT f.noFic, SUM(DATEDIFF(COALESCE(l.retour, CURDATE()), l.depart) * t.prixjour) AS montant_fiche
 FROM location_skis.fiches f
 JOIN location_skis.lignesfic l ON f.noFic = l.noFic
 JOIN location_skis.articles a ON lf.refart = a.refart
