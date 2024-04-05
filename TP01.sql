@@ -21,3 +21,4 @@ CREATE TABLE invPersonne (
     description TEXT NOT NULL ,
     salaire_annuel DECIMAL(12, 2) NOT NULL 
 );
+
